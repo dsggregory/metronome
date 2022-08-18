@@ -4,8 +4,10 @@ A command-line metronome.
 Of course there are much better metronome apps for phones these days. My main use case for writing this was to have an option (-mrate) to automatically increase the rate of the metronome to practice parts at increasing speeds. I also have a foot pedal that simulates key presses. I wanted to use it to increase/decrease the rate manually (-rate-keys).
 
 ## Usage
-```shell
+```text
 Usage of metronome:
+  -c int
+        count in this many measures (default 1)
   -mrate int
         increase rate every 'mrate' measures up to a rate of 200 max
   -rate int
