@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"flag"
 	"fmt"
@@ -64,8 +65,10 @@ func main() {
 		return
 	}
 
-	// keypress tempo change, only supported on systems with termios
-	ostate, kbTempoChan, err := handleKeypressTempoAdj(cfg.tempoKeys)
+	ctx, cancel := context.WithCancel(context.Background())
+
+	// keypress tempo change and quit, only supported on systems with termios
+	ostate, kbTempoChan, err := handleKeypress(cancel, cfg.tempoKeys)
 	if err != nil {
 		log.Println("Error: unable to make raw term.", err.Error())
 	} else {
@@ -79,8 +82,11 @@ func main() {
 	nBeat := 0
 	measure := 1 - cfg.countIn
 	kbNewTempo := cfg.tempo
+loop:
 	for {
 		select {
+		case <-ctx.Done():
+			break loop
 		case t := <-tick.C:
 			if nBeat == cfg.beatsPerMeasure {
 				nBeat = 0
@@ -196,7 +202,7 @@ const (
 	KeypressDecrTempo
 )
 
-func handleKeypressTempoAdj(keys string) (*unix.Termios, chan int, error) {
+func handleKeypress(cancel context.CancelFunc, keys string) (*unix.Termios, chan int, error) {
 	tempoKeys := make([]byte, 2)
 	tempoKeys[0] = keys[0] // decrease
 	tempoKeys[1] = keys[1] // increase
@@ -209,15 +215,19 @@ func handleKeypressTempoAdj(keys string) (*unix.Termios, chan int, error) {
 		for {
 			_, err := os.Stdin.Read(b) // read one byte from raw terminal
 			if err != nil {
-				log.Fatal(err.Error())
+				log.Println(err.Error())
+				cancel()
 				return
 			}
-			log.Println("read keypress ", b[0])
+			log.Println("read keypress", b[0])
 			switch b[0] {
 			case tempoKeys[0]:
 				kbTempo <- KeypressDecrTempo
 			case tempoKeys[1]:
 				kbTempo <- KeypressIncrTempo
+			case 'q':
+				cancel()
+				return
 			default:
 				log.Println("unhandled keypress", b[0])
 			}

@@ -20,6 +20,8 @@ Usage of metronome:
         increase/decrease volume logarithmically, pos or neg. Try using 1.3 as the value.
 ```
 
+Quit the application by pressing the key `q` or `CTRL-C`.
+
 ## References
 * afplay <file> - play a sound file from MacOS command line
 * github.com/faiface/beep
