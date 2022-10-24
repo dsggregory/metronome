@@ -13,7 +13,7 @@ Usage of metronome:
   -tempo int
         specify the tempo in beats per minute (default 60)
   -tempo-keys string
-        increase or decrease tempo using keyboard keys. Example: "12" increases tempo when 1 is pressed and decreases tempo when 2 is pressed (default ", ")
+        increase or decrease tempo using keyboard keys. Example: "12" decreases tempo when 1 is pressed and increases tempo when 2 is pressed (default ", ")
   -tsig int
         specify the beats per measure (default 4)
   -vol float

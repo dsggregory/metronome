@@ -39,7 +39,7 @@ type config struct {
 	beatsPerMeasure int // 4/(4)
 	// mrate increase tempo by some factor every specified measures
 	mrate int
-	// tempoKeys increase or decrease tempo using keyboard keys. Example: "12" increases tempo when 1 is pressed and decreases tempo when 2 is pressed.
+	// tempoKeys increase or decrease tempo using keyboard keys. Example: "12" decreases tempo when 1 is pressed and increases tempo when 2 is pressed.
 	tempoKeys      string
 	volumeIncrease float64
 	countIn        int
@@ -54,7 +54,7 @@ func main() {
 	flag.IntVar(&cfg.tempo, "tempo", 60, "specify the tempo in beats per minute")
 	flag.IntVar(&cfg.beatsPerMeasure, "tsig", 4, "specify the beats per measure")
 	flag.IntVar(&cfg.mrate, "mrate", 0, "increase tempo every 'mrate' measures up to a tempo of 200 max")
-	flag.StringVar(&cfg.tempoKeys, "tempo-keys", ", ", "increase or decrease tempo using keyboard keys. Example: \"12\" increases tempo when 1 is pressed and decreases tempo when 2 is pressed")
+	flag.StringVar(&cfg.tempoKeys, "tempo-keys", ", ", "increase or decrease tempo using keyboard keys. Example: \"12\" decreases tempo when 1 is pressed and increases tempo when 2 is pressed")
 	flag.Float64Var(&cfg.volumeIncrease, "vol", 0, "increase/decrease volume logarithmically, pos or neg")
 	flag.IntVar(&cfg.countIn, "c", 1, "count in this many measures")
 	flag.Parse()
