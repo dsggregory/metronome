@@ -75,6 +75,8 @@ func main() {
 		defer reset(int(os.Stdin.Fd()), ostate)
 	}
 
+	displayKeys(cfg.tempoKeys)
+
 	// interval per beat based on BPM
 	tick := newTicker(cfg.tempo)
 	defer tick.Stop()
@@ -202,6 +204,37 @@ const (
 	KeypressDecrTempo
 )
 
+/*
+Metronone key chart:
+  k1 - Decrease Tempo
+  k2 - Increase Tempo
+  q  - Quit
+*/
+func displayKeys(keys string) {
+	type keymap struct {
+		key   uint8
+		label string
+	}
+	km := []keymap{
+		{key: keys[0], label: "Decrease Tempo"},
+		{key: keys[1], label: "Increase Tempo"},
+		{key: 'q', label: "Quit"},
+	}
+
+	fmt.Println("Metronome key chart:")
+	var kstr string
+	for _, k := range km {
+		kstr = string(k.key)
+		switch k.key {
+		case ' ':
+			kstr = "[space]"
+		case '\t':
+			kstr = "[tab]"
+		}
+		fmt.Printf("  %7s - %s\n", kstr, k.label)
+	}
+}
+
 func handleKeypress(cancel context.CancelFunc, keys string) (*unix.Termios, chan int, error) {
 	tempoKeys := make([]byte, 2)
 	tempoKeys[0] = keys[0] // decrease
@@ -230,6 +263,7 @@ func handleKeypress(cancel context.CancelFunc, keys string) (*unix.Termios, chan
 				return
 			default:
 				log.Println("unhandled keypress", b[0])
+				displayKeys(keys)
 			}
 		}
 	}()
