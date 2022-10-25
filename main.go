@@ -104,10 +104,10 @@ loop:
 			}
 			var tik beep.StreamSeeker
 			if measure < 1 {
-				fmt.Printf("%s [%d] Count In %d.%d\n", t.Format("15:04:05.000000"), cfg.tempo, measure, nBeat)
+				fmt.Printf("%s [%d] Count In %d.%d\n", t.Format("15:04:05.000000"), cfg.tempo, measure, nBeat+1)
 				tik = clicks.countIn.Streamer(0, clicks.countIn.Len())
 			} else {
-				fmt.Printf("%s [%d] Beat %d.%d\n", t.Format("15:04:05.000000"), cfg.tempo, measure, nBeat)
+				fmt.Printf("%s [%d] Beat %d.%d\n", t.Format("15:04:05.000000"), cfg.tempo, measure, nBeat+1)
 				tik = clicks.beats[nBeat].Streamer(0, clicks.beats[nBeat].Len())
 			}
 			speaker.Play(tik)
